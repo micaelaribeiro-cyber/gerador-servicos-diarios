@@ -1,0 +1,1 @@
+A biblioteca xlsx-js-style não está embutida nesta versão. O aplicativo tenta carregá-la do jsDelivr e, se falhar, do unpkg. Isso exige conexão à internet e acesso a pelo menos um desses domínios. Os dados da planilha continuam sendo processados localmente no navegador.
