@@ -3,355 +3,222 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Gerador de Programação Operacional</title>
+<title>Central de Programação Operacional</title>
 <style>
- :root{--paper:#eef2f4;--ink:#172a32;--teal:#075b61;--teal2:#0b7478;--line:#d6e0e4;--signal:#e45b2b;--ok:#18794e;--err:#a3201a;--muted:#52666e}
+:root{
+  --navy:#122a32;--navy2:#1b3b43;--teal:#087f80;--teal-dark:#06686b;
+  --teal-soft:#e5f4f2;--canvas:#f3f6f7;--white:#fff;--ink:#1b3038;
+  --muted:#71838a;--line:#e1e9eb;--danger:#a93232;--success:#16734f;
+  --shadow:0 8px 26px rgba(18,42,50,.07);--radius:16px;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
-main{max-width:900px;margin:0 auto;padding:38px 20px 64px}
-h1{margin:0 0 8px;font-size:clamp(1.55rem,4vw,2.25rem);letter-spacing:.01em;color:var(--teal);font-weight:800}
-.lead{margin:0 0 28px;max-width:68ch;color:var(--muted)}
-.drop{display:flex;flex-direction:column;gap:6px;padding:34px 24px;background:#fff;border:2px dashed var(--teal2);border-radius:12px;text-align:center;cursor:pointer;box-shadow:0 3px 12px #17343b0b}
-.drop:hover,.drop.over,.drop:focus-within{background:#f4fbfb;border-style:solid}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.5 Inter,"Segoe UI",system-ui,-apple-system,sans-serif}
+button,a,input{font:inherit}
+.shell{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr)}
+.sidebar{background:linear-gradient(180deg,var(--navy),#10242b);color:#d9e7e9;padding:26px 18px;display:flex;flex-direction:column;gap:30px}
+.brand{display:flex;align-items:center;gap:12px;padding:4px 8px 22px;border-bottom:1px solid #ffffff18}
+.brand-mark{width:40px;height:40px;border-radius:13px;background:var(--teal);display:grid;place-items:center;color:#fff;font-weight:900;font-size:19px;box-shadow:0 6px 16px #087f8044}
+.brand strong{display:block;font-size:14px;letter-spacing:.02em;color:#fff}
+.brand small{display:block;color:#91aeb3;font-size:11px;margin-top:2px}
+.nav-label{font-size:10px;font-weight:800;letter-spacing:.14em;color:#78969c;padding:0 12px;margin-bottom:8px}
+nav{display:grid;gap:7px}
+nav a{color:#b9cdd0;text-decoration:none;padding:11px 13px;border-radius:10px;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600}
+nav a:hover,nav a.active{background:#ffffff12;color:#fff}
+nav a.active{box-shadow:inset 3px 0 var(--teal)}
+.nav-icon{width:20px;text-align:center;color:#7fd0ca;font-size:16px}
+.sidebar-foot{margin-top:auto;border:1px solid #ffffff20;border-radius:13px;padding:14px;color:#a8c0c4;font-size:11px}
+.sidebar-foot b{display:block;color:#e7f4f4;font-size:12px;margin-bottom:5px}
+main{min-width:0;padding:28px clamp(18px,3.2vw,48px) 54px;max-width:1600px;width:100%;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:30px}
+.crumb{font-size:12px;color:var(--muted)}
+.crumb b{color:var(--ink)}
+.top-right{display:flex;align-items:center;gap:10px}
+.status-pill{display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 12px;font-size:11px;color:#50656b;font-weight:700}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#21a477}
+.avatar{width:34px;height:34px;border-radius:50%;background:#d7eeeb;color:var(--teal-dark);display:grid;place-items:center;font-weight:800;font-size:12px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:25px}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.15em;color:var(--teal);font-weight:900;margin:0 0 7px}
+h1{font-size:clamp(25px,3vw,34px);line-height:1.15;letter-spacing:-.04em;margin:0;color:var(--navy);font-weight:800}
+.subtitle{color:var(--muted);margin:9px 0 0;max-width:680px;font-size:13px}
+.date-chip{white-space:nowrap;border:1px solid var(--line);background:#fff;border-radius:10px;padding:9px 13px;color:#52676d;font-size:12px;font-weight:700}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:27px 0 13px}
+.section-title h2{font-size:15px;margin:0;color:var(--navy);letter-spacing:-.01em}
+.section-title span{font-size:11px;color:var(--muted)}
+.upload-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+.upload-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(230px,.65fr);gap:20px;align-items:stretch}
+.drop{min-height:190px;border:1.5px dashed #80bdb9;background:#f8fcfb;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:8px;cursor:pointer;transition:.18s ease}
+.drop:hover,.drop.over,.drop:focus-within{background:var(--teal-soft);border-color:var(--teal);border-style:solid}
+.upload-icon{width:48px;height:48px;border-radius:15px;background:#dff2ef;color:var(--teal);display:grid;place-items:center;font-size:23px;margin-bottom:3px}
+.drop strong{font-size:14px;color:var(--navy)}
+.drop span{font-size:11px;color:var(--muted)}
 .drop input{position:absolute;opacity:0;width:1px;height:1px}
-.drop span{font-size:.9rem;color:var(--muted)}
-.actions{display:flex;align-items:center;gap:16px;margin:20px 0}
-.primary{display:inline-block;border:0;border-radius:7px;background:var(--signal);color:#fff;font:700 1rem inherit;font-family:inherit;padding:14px 26px;cursor:pointer;text-decoration:none;letter-spacing:.025em;box-shadow:0 3px 8px #9c3c1d22}
-.primary:hover{background:#c94a23}.primary:disabled{background:#9aa9ae;cursor:not-allowed}
-.primary:focus-visible,.drop:focus-within{outline:3px solid var(--teal);outline-offset:2px}
-.busy{display:flex;align-items:center;gap:8px}.busy i{width:16px;height:16px;border:3px solid var(--line);border-top-color:var(--teal);border-radius:50%;animation:s .8s linear infinite}
-@keyframes s{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.busy i{animation-duration:3s}}
-.msg{margin:0 0 16px;font-weight:700}.ok{color:var(--ok)}.error{color:var(--err);background:#fff;border-left:4px solid var(--err);padding:10px 14px;border-radius:5px}
-.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 24px}
-.totals div{background:#fff;padding:16px 18px;border-radius:10px;border:1px solid var(--line);box-shadow:0 2px 8px #17343b08}
-.totals dt{font-size:.85rem;color:var(--muted)}.totals dd{margin:0;font-size:1.9rem;font-weight:800;color:var(--teal)}
-.locs{list-style:none;margin:0 0 20px;padding:0;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.locs li{display:grid;grid-template-columns:160px 1fr 48px;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--paper)}.locs li:last-child{border:0}
-.locs .bar{height:10px;background:#e7edef;border-radius:6px;overflow:hidden}.locs .bar b{display:block;height:100%;background:var(--teal2);border-radius:6px}.locs .n{text-align:right;font-weight:800;color:var(--teal)}
-.notes{margin:0 0 24px;padding:14px 18px 14px 38px;font-size:.92rem;background:#fff;border:1px solid var(--line);border-radius:9px}.dl{margin-top:4px}
-@media (max-width:560px){main{padding:26px 14px 44px}.totals{grid-template-columns:1fr}.locs li{grid-template-columns:110px 1fr 40px}.actions{align-items:flex-start;flex-direction:column}}
-
+.file-hint{color:var(--teal-dark)!important;font-weight:700;max-width:100%;overflow-wrap:anywhere}
+.upload-side{background:#f5f8f8;border-radius:14px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;gap:18px}
+.upload-side h3{font-size:13px;margin:0 0 8px;color:var(--navy)}
+.upload-side p{font-size:11px;color:var(--muted);margin:0}
+.rule-list{display:grid;gap:10px}
+.rule{display:flex;gap:9px;align-items:flex-start;font-size:11px;color:#52676d}
+.rule i{font-style:normal;color:var(--teal);font-weight:900}
+.actions{display:flex;align-items:center;gap:14px;margin-top:17px;flex-wrap:wrap}
+.primary{border:0;border-radius:10px;background:var(--teal);color:#fff;font-weight:800;font-size:12px;letter-spacing:.04em;padding:13px 20px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 5px 12px #087f8028;transition:.18s}
+.primary:hover{background:var(--teal-dark);transform:translateY(-1px)}
+.primary:disabled{background:#aab8ba;box-shadow:none;cursor:not-allowed;transform:none}
+.busy{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}
+.busy i{width:15px;height:15px;border:2px solid #cbd9da;border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.msg{font-weight:700;font-size:12px;margin:16px 0 0}
+.error{color:var(--danger);background:#fff4f3;border:1px solid #f0d1ce;padding:12px 14px;border-radius:10px}
+.ok{color:var(--success)}
+#result{margin-top:28px}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:15px 0 22px}
+.metric{background:#fff;border:1px solid var(--line);border-radius:14px;padding:17px 18px;box-shadow:0 3px 12px #122a3208;position:relative;overflow:hidden}
+.metric:after{content:"";position:absolute;right:-18px;top:-22px;width:75px;height:75px;border-radius:50%;background:var(--teal-soft)}
+.metric dt{font-size:11px;color:var(--muted);font-weight:700;position:relative;z-index:1}
+.metric dd{margin:6px 0 0;font-size:29px;line-height:1;color:var(--navy);font-weight:850;position:relative;z-index:1}
+.metric:nth-child(2) dd{color:#9a5a2b}.metric:nth-child(3) dd{color:var(--teal)}
+.result-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:16px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:19px;box-shadow:0 3px 12px #122a3208;min-width:0}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+.panel-head h3{font-size:13px;margin:0;color:var(--navy)}
+.panel-head small{font-size:10px;color:var(--muted)}
+.locs{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.locs li{display:grid;grid-template-columns:125px minmax(30px,1fr) 36px;align-items:center;gap:10px;font-size:11px;color:#536970}
+.locs .bar{height:8px;background:#edf2f3;border-radius:10px;overflow:hidden}
+.locs .bar b{display:block;height:100%;background:linear-gradient(90deg,#0a7778,#50b7aa);border-radius:10px}
+.locs .n{text-align:right;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+.notes{margin:0;padding:0 0 0 17px;display:grid;gap:10px;color:#5c7076;font-size:11px}
+.notes li::marker{color:var(--teal)}
+.result-footer{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:17px;padding-top:17px;border-top:1px solid var(--line);flex-wrap:wrap}
+.privacy{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.dl{background:var(--navy);box-shadow:none}
+.dl:hover{background:var(--navy2)}
+.hidden{display:none!important}
+@media(max-width:900px){.shell{grid-template-columns:78px minmax(0,1fr)}.sidebar{padding:22px 10px}.brand{justify-content:center;padding:4px 0 20px}.brand-copy,.nav-label,.nav-text,.sidebar-foot{display:none}nav a{justify-content:center;padding:12px 5px}.nav-icon{font-size:18px}.upload-grid,.result-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.shell{display:block}.sidebar{display:none}main{padding:20px 14px 40px}.topbar{margin-bottom:22px}.page-head{align-items:flex-start;flex-direction:column}.date-chip{display:none}.upload-card{padding:14px}.upload-grid{gap:12px}.upload-side{padding:14px}.metrics{grid-template-columns:1fr;gap:9px}.metric{padding:14px}.metric dd{font-size:25px}.locs li{grid-template-columns:105px minmax(25px,1fr) 30px;gap:7px}.result-footer{align-items:stretch}.dl{width:100%}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition:none!important}}
 </style>
 </head>
 <body>
-<main>
-  <h1>GERADOR DE PROGRAMAÇÃO OPERACIONAL</h1>
-  <p class="lead">Selecione o relatório de OS para gerar a programação por localidade e agrupada por técnico. Os dados são processados neste navegador.</p>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">G</div>
+      <div class="brand-copy"><strong>GIGASAT</strong><small>OPERAÇÕES · AGENDAMENTO</small></div>
+    </div>
+    <div>
+      <div class="nav-label">CENTRAL DE CONTROLE</div>
+      <nav>
+        <a class="active" href="#inicio"><span class="nav-icon">⌂</span><span class="nav-text">Visão geral</span></a>
+        <a href="#importar"><span class="nav-icon">⇧</span><span class="nav-text">Importar relatório</span></a>
+        <a href="#resultado"><span class="nav-icon">▦</span><span class="nav-text">Distribuição por localidade</span></a>
+      </nav>
+    </div>
+    <div class="sidebar-foot"><b>Processamento seguro</b>Os relatórios são lidos e processados localmente no seu navegador. Nenhum dado de cliente é enviado ao servidor.</div>
+  </aside>
 
-  <label id="drop" class="drop" for="file">
-    <input id="file" type="file" accept=".xls,.xlsx,.xlsm">
-    <strong id="fname">Arraste o relatório aqui ou clique para selecionar</strong>
-    <span>Formatos aceitos: .xls e .xlsx</span>
-  </label>
+  <main id="inicio">
+    <div class="topbar">
+      <div class="crumb">Operações <span> / </span> <b>Programação diária</b></div>
+      <div class="top-right"><div class="status-pill"><span class="status-dot"></span> Sistema disponível</div><div class="avatar">OP</div></div>
+    </div>
 
-  <div class="actions">
-    <button id="gerar" class="primary" disabled>GERAR PROGRAMAÇÃO</button>
-    <span id="busy" class="busy" hidden><i></i>Processando…</span>
-  </div>
+    <header class="page-head">
+      <div>
+        <p class="eyebrow">CENTRAL DE OPERAÇÕES</p>
+        <h1>Programação operacional</h1>
+        <p class="subtitle">Importe o relatório de OS e gere a programação organizada por localidade e agrupada por técnico, pronta para distribuição.</p>
+      </div>
+      <div class="date-chip" id="today">PROGRAMAÇÃO DIÁRIA</div>
+    </header>
 
-  <p id="error" class="msg error" role="alert" hidden></p>
+    <div class="section-title" id="importar">
+      <h2>Importação do relatório</h2><span>Etapa 01 · Seleção da base</span>
+    </div>
+    <section class="upload-card">
+      <div class="upload-grid">
+        <label id="drop" class="drop" for="file">
+          <input id="file" type="file" accept=".xls,.xlsx,.xlsm">
+          <div class="upload-icon">⇧</div>
+          <strong id="fname">Arraste o relatório aqui ou clique para selecionar</strong>
+          <span>Selecione um arquivo Excel para iniciar o processamento</span>
+          <span class="file-hint">Formatos aceitos: .xls e .xlsx</span>
+        </label>
+        <div class="upload-side">
+          <div><h3>Regras aplicadas automaticamente</h3><p>O sistema organiza a base seguindo os critérios operacionais definidos.</p></div>
+          <div class="rule-list">
+            <div class="rule"><i>✓</i><span>Exclusão das OS com assunto Retirada</span></div>
+            <div class="rule"><i>✓</i><span>Separação em sete abas por localidade</span></div>
+            <div class="rule"><i>✓</i><span>Serviços agrupados por colaborador e horário</span></div>
+            <div class="rule"><i>✓</i><span>Conferência de totais e duplicidades</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="gerar" class="primary" disabled><span>⚙</span> GERAR PROGRAMAÇÃO</button>
+        <span id="busy" class="busy" hidden><i></i>Processando relatório…</span>
+      </div>
+      <p id="error" class="msg error" role="alert" hidden></p>
+    </section>
 
-  <section id="result" hidden>
-    <p class="msg ok" id="done"></p>
-    <dl class="totals">
-      <div><dt>OS analisadas</dt><dd id="t-all"></dd></div>
-      <div><dt>Retiradas excluídas</dt><dd id="t-rem"></dd></div>
-      <div><dt>OS aproveitadas</dt><dd id="t-kept"></dd></div>
-    </dl>
-    <ul id="locs" class="locs"></ul>
-    <ul id="notes" class="notes"></ul>
-    <a id="download" class="primary dl" href="#" download>BAIXAR EXCEL</a>
-  </section>
-</main>
-<!-- Biblioteca Excel carregada de CDN pública; os dados da planilha não são enviados para ela. -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.min.js"></script>
+    <section id="result" hidden>
+      <div class="section-title" id="resultado"><h2>Resumo do processamento</h2><span>Etapa 02 · Resultado da análise</span></div>
+      <p class="msg ok" id="done"></p>
+      <dl class="metrics">
+        <div class="metric"><dt>OS analisadas</dt><dd id="t-all">—</dd></div>
+        <div class="metric"><dt>Retiradas excluídas</dt><dd id="t-rem">—</dd></div>
+        <div class="metric"><dt>OS aproveitadas</dt><dd id="t-kept">—</dd></div>
+      </dl>
+      <div class="result-grid">
+        <section class="panel">
+          <div class="panel-head"><h3>Distribuição por localidade</h3><small>Quantidade de serviços</small></div>
+          <ul id="locs" class="locs"></ul>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h3>Conferências e observações</h3><small>Validação da base</small></div>
+          <ul id="notes" class="notes"></ul>
+        </section>
+      </div>
+      <div class="result-footer">
+        <div class="privacy">▣ Processamento local · Dados dos clientes não são enviados</div>
+        <a id="download" class="primary dl" href="#" download>↓ BAIXAR EXCEL</a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- A lógica operacional existente é mantida; apenas a interface é redesenhada. -->
+<script src="processor.js"></script>
 <script>
-/* Lógica de processamento (sem dependência de biblioteca). Roda no navegador e no Node (testes). */
-(function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory();
-  else root.Processor = factory();
-})(typeof self !== 'undefined' ? self : this, function () {
-  'use strict';
-
-  const SHEETS = ['Cidades Externas', 'Itabatã', 'Mucuri', 'Nova Viçosa', 'Posto da Mata', 'Nanuque', 'Serra dos Aimorés'];
-  const EXTERNAS = SHEETS[0];
-  const LOCAL = { itabatan: 'Itabatã', itabata: 'Itabatã', mucuri: 'Mucuri', 'nova vicosa': 'Nova Viçosa', 'posto da mata': 'Posto da Mata', nanuque: 'Nanuque', 'serra dos aimores': 'Serra dos Aimorés' };
-  const FMT_DT = 'dd/mm/yyyy hh:mm', FMT_D = 'dd/mm/yyyy';
-
-  // Ordem final das colunas (A..N) e nomes aceitos no relatório original (já normalizados).
-  const COLS = [
-    { key: 'filial', label: 'Filial', aliases: ['filial'] },
-    { key: 'abertura', label: 'Abertura', type: 'date', aliases: ['abertura', 'data abertura', 'data de abertura'] },
-    { key: 'status', label: 'Status', aliases: ['status', 'situacao'] },
-    { key: 'agendamento', label: 'Agendamento', type: 'date', aliases: ['agendamento', 'data agendamento', 'data de agendamento', 'data agenda'] },
-    { key: 'cliente', label: 'Cliente', aliases: ['cliente', 'nome cliente', 'nome do cliente', 'razao social'] },
-    { key: 'assunto', label: 'Assunto', aliases: ['assunto'] },
-    { key: 'colaborador', label: 'Colaborador', aliases: ['colaborador', 'tecnico'] },
-    { key: 'endereco', label: 'Endereço', aliases: ['endereco', 'logradouro'] },
-    { key: 'complemento', label: 'Complemento', aliases: ['complemento'] },
-    { key: 'bairro', label: 'Bairro', aliases: ['bairro'] },
-    { key: 'celular', label: 'Telefone celular', type: 'phone', aliases: ['telefone celular', 'celular', 'tel celular'] },
-    { key: 'whatsapp', label: 'Whatsapp', type: 'phone', aliases: ['whatsapp', 'whats app'] },
-    { key: 'residencial', label: 'Telefone residencial', type: 'phone', aliases: ['telefone residencial', 'tel residencial', 'telefone fixo'] },
-    { key: 'comercial', label: 'Telefone comercial', type: 'phone', aliases: ['telefone comercial', 'tel comercial'] }
-  ];
-
-  // Ordem de apresentação: primeiro execução (horário/cliente/serviço), depois localização e contato.
-  // O índice interno das colunas permanece estável para preservar a leitura do relatório original.
-  const DISPLAY_ORDER = [3, 4, 5, 9, 7, 8, 6, 10, 11, 12, 13, 2, 1, 0];
-
-  // Minúsculas, sem acentos, sem pontuação, espaços únicos.
-  const norm = v => String(v == null ? '' : v).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-
-  function mapColumns(cells) {
-    const normed = cells.map(norm), used = new Set(), map = {};
-    COLS.forEach(c => {
-      let idx = -1;
-      for (const a of c.aliases) {
-        idx = normed.findIndex((x, j) => x === a && !used.has(j));
-        if (idx >= 0) break;
+/* Compatibilidade adicional para a grafia Itabatan, sem acento. */
+(function(){
+  if (!window.Processor) return;
+  const original = Processor.processRows;
+  Processor.processRows = function(rows){
+    const copy = rows.map(row => Array.isArray(row) ? row.slice() : row);
+    let header = -1, complement = -1;
+    for(let r=0;r<Math.min(copy.length,40);r++){
+      const cells = (copy[r]||[]).map(Processor.norm);
+      const idx = cells.indexOf('complemento');
+      if(idx>=0){header=r;complement=idx;break;}
+    }
+    if(header>=0){
+      for(let r=header+1;r<copy.length;r++){
+        if(!Array.isArray(copy[r])) continue;
+        const value=Processor.norm(copy[r][complement]);
+        if(value==='itabatan'||value==='itabata') copy[r][complement]='Itabatã';
       }
-      if (idx >= 0) used.add(idx);
-      map[c.key] = idx;
-    });
-    return map;
-  }
-
-  function detectHeader(rows) {
-    let best = null;
-    for (let r = 0; r < Math.min(rows.length, 40); r++) {
-      const map = mapColumns(rows[r] || []);
-      const n = Object.values(map).filter(i => i >= 0).length;
-      if (n >= 3 && (!best || n > best.n)) best = { row: r, map, n };
     }
-    return best;
-  }
-
-  // Converte número serial do Excel, Date ou texto (dd/mm/aaaa [hh:mm[:ss]] ou aaaa-mm-dd) em serial.
-  function toSerial(v) {
-    if (typeof v === 'number') return v >= 1 && v < 2958466 ? v : null;
-    if (v instanceof Date && !isNaN(v)) return Date.UTC(v.getFullYear(), v.getMonth(), v.getDate(), v.getHours(), v.getMinutes(), v.getSeconds()) / 864e5 + 25569;
-    if (typeof v !== 'string') return null;
-    const s = v.trim();
-    let m = s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})(?:[ T,]+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/), d, mo, y;
-    if (m) { d = +m[1]; mo = +m[2]; y = +m[3]; }
-    else if ((m = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T]+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/))) { y = +m[1]; mo = +m[2]; d = +m[3]; }
-    else return null;
-    if (y < 100) y += 2000;
-    if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
-    return Date.UTC(y, mo - 1, d, +(m[4] || 0), +(m[5] || 0), +(m[6] || 0)) / 864e5 + 25569;
-  }
-
-  function makeCell(v, col) {
-    if (v == null || v === '') return null;
-    if (col.type === 'date') {
-      const s = toSerial(v);
-      if (s == null) return { t: 's', v: String(v) }; // não inventa: mantém o texto original
-      return { t: 'n', v: s, z: s - Math.floor(s) > 1e-6 ? FMT_DT : FMT_D };
-    }
-    if (typeof v === 'number') return col.type === 'phone' ? { t: 's', v: String(v) } : { t: 'n', v };
-    if (typeof v === 'boolean') return { t: 'b', v };
-    return { t: 's', v: String(v) };
-  }
-
-  const isRetirada = assunto => /\bretirada\b/.test(norm(assunto));
-
-  function processRows(rows) {
-    const hdr = detectHeader(rows);
-    if (!hdr) throw new Error('Não encontrei a linha de cabeçalhos (Assunto, Complemento, Cliente...). Confira se o arquivo é o relatório de OS.');
-    const map = hdr.map;
-    if (map.assunto < 0) throw new Error('A coluna "Assunto" não foi encontrada no relatório.');
-    if (map.complemento < 0) throw new Error('A coluna "Complemento" não foi encontrada no relatório.');
-
-    const sheets = {}, srcIdx = {};
-    SHEETS.forEach(n => { sheets[n] = []; srcIdx[n] = []; });
-    const removedSubjects = {};
-    let analyzed = 0, removed = 0;
-
-    for (let i = hdr.row + 1; i < rows.length; i++) {
-      const row = rows[i] || [];
-      if (row.every(c => c === '' || c == null)) continue;
-      analyzed++;
-      const assunto = row[map.assunto];
-      if (isRetirada(assunto)) {
-        removed++;
-        const k = String(assunto).trim();
-        removedSubjects[k] = (removedSubjects[k] || 0) + 1;
-        continue;
-      }
-      const rec = COLS.map(c => (map[c.key] >= 0 ? makeCell(row[map[c.key]], c) : null));
-      const dest = LOCAL[norm(row[map.complemento])] || EXTERNAS;
-      if (dest !== EXTERNAS) rec[8] = { t: 's', v: dest }; // complemento padronizado
-      sheets[dest].push(rec);
-      srcIdx[dest].push(i);
-    }
-
-    const val = (rec, i) => (rec[i] ? rec[i].v : '');
-    SHEETS.forEach(n => sheets[n].sort((a, b) => {
-      const tech = String(val(a, 6)).localeCompare(String(val(b, 6)), 'pt-BR', { sensitivity: 'base' });
-      const sa = a[3] && a[3].t === 'n' ? a[3].v : Infinity, sb = b[3] && b[3].t === 'n' ? b[3].v : Infinity;
-      return tech || (sa === sb ? 0 : sa < sb ? -1 : 1) || String(val(a, 4)).localeCompare(String(val(b, 4)), 'pt-BR');
-    }));
-
-    const perSheet = {};
-    let kept = 0;
-    SHEETS.forEach(n => { perSheet[n] = sheets[n].length; kept += sheets[n].length; });
-    const all = [].concat(...SHEETS.map(n => srcIdx[n]));
-    const integrity = { ok: kept === analyzed - removed && new Set(all).size === all.length };
-
-    const warnings = [];
-    const missing = COLS.filter(c => map[c.key] < 0).map(c => c.label);
-    if (missing.length) warnings.push('Colunas não encontradas no relatório (ficaram em branco): ' + missing.join(', ') + '.');
-    const seen = new Map();
-    SHEETS.forEach(n => sheets[n].forEach(r => { const k = JSON.stringify(r); seen.set(k, (seen.get(k) || 0) + 1); }));
-    const dup = [...seen.values()].filter(c => c > 1).reduce((a, c) => a + c, 0);
-    if (dup) warnings.push(dup + ' linhas são idênticas a outra linha do relatório (todas as colunas). Foram mantidas.');
-
-    const usedCols = new Set(Object.values(map));
-    const unused = (rows[hdr.row] || []).map((h, j) => (!usedCols.has(j) && String(h).trim() ? String(h).trim() : null)).filter(Boolean);
-
-    return { map, headerRow: hdr.row, sheets, stats: { analyzed, removed, kept, perSheet }, removedSubjects, warnings, unused, integrity };
-  }
-
-  const HEADER_STYLE = {
-    font: { bold: true, color: { rgb: 'FFFFFF' } },
-    fill: { patternType: 'solid', fgColor: { rgb: '0A5560' } },
-    alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
-    border: { bottom: { style: 'medium', color: { rgb: 'E0531F' } } }
+    return original(copy);
   };
-  const letter = i => String.fromCharCode(65 + i);
-
-  function buildSheet(records) {
-    const ws = {}, widths = DISPLAY_ORDER.map(i => COLS[i].label.length + 4);
-    const outCols = DISPLAY_ORDER.map(i => COLS[i]);
-    outCols.forEach((c, i) => { ws[letter(i) + '1'] = { t: 's', v: c.label, s: HEADER_STYLE }; });
-    let previousTech = null;
-    records.forEach((rec, r) => {
-      const tech = rec[6] ? String(rec[6].v || '').trim() : '';
-      const startsGroup = r === 0 || tech.localeCompare(previousTech || '', 'pt-BR', { sensitivity: 'base' }) !== 0;
-      DISPLAY_ORDER.forEach((sourceIndex, outIndex) => {
-        const cell = rec[sourceIndex];
-        if (!cell) return;
-        const copy = Object.assign({}, cell);
-        if (startsGroup) copy.s = Object.assign({}, copy.s || {}, {
-          border: { top: { style: 'medium', color: { rgb: '0B7478' } } }
-        });
-        ws[letter(outIndex) + (r + 2)] = copy;
-        widths[outIndex] = Math.max(widths[outIndex], (cell.z ? 17 : String(cell.v).length) + 2);
-      });
-      previousTech = tech;
-    });
-    const ref = 'A1:N' + (records.length + 1);
-    ws['!ref'] = ref;
-    ws['!cols'] = widths.map((w, i) => ({ wch: Math.min(Math.max(w, i === 0 ? 18 : 12), i === 4 ? 38 : 32) }));
-    ws['!autofilter'] = { ref };
-    ws['!freeze'] = { xSplit: '0', ySplit: '1', topLeftCell: 'A2', activePane: 'bottomLeft', state: 'frozen' };
-    ws['!rows'] = [{ hpt: 30 }];
-    return ws;
-  }
-
-  function buildWorkbook(result) {
-    const wb = { SheetNames: SHEETS.slice(), Sheets: {} };
-    SHEETS.forEach(n => { wb.Sheets[n] = buildSheet(result.sheets[n]); });
-    return wb;
-  }
-
-  return { SHEETS, COLS, norm, toSerial, processRows, buildWorkbook };
-});
-
-</script>
-<script>
-/* Interface. Todo o processamento ocorre localmente; nenhum dado é enviado. */
-(function () {
-  'use strict';
-  const $ = id => document.getElementById(id);
-  const CDN_URLS = [
-    'https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js',
-    'https://unpkg.com/xlsx-js-style@1.2.0/dist/xlsx.bundle.js'
-  ]; // alternativas caso uma CDN esteja indisponível
-  let file = null, url = null;
-
-  function loadXlsx() {
-    if (window.XLSX) return Promise.resolve();
-    return new Promise(async (resolve, reject) => {
-      for (const src of CDN_URLS) {
-        try {
-          await new Promise((ok, fail) => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.onload = () => window.XLSX ? ok() : fail(new Error('Biblioteca não inicializou'));
-            script.onerror = () => fail(new Error('Falha ao acessar ' + new URL(src).host));
-            document.head.appendChild(script);
-          });
-          resolve();
-          return;
-        } catch (_) { /* tenta a próxima CDN */ }
-      }
-      reject(new Error('Não foi possível carregar a biblioteca Excel. Verifique a conexão ou peça à equipe de TI a liberação de cdn.jsdelivr.net e unpkg.com.'));
-    });
-  }
-  const showError = m => { $('error').textContent = m; $('error').hidden = !m; };
-  function setFile(f) {
-    showError(''); $('result').hidden = true;
-    if (!f) return;
-    if (!/\.(xls|xlsx|xlsm)$/i.test(f.name)) return showError('Selecione um arquivo .xls ou .xlsx.');
-    file = f; $('fname').textContent = f.name; $('gerar').disabled = false;
-  }
-  $('file').addEventListener('change', e => setFile(e.target.files[0]));
-  const dz = $('drop');
-  ['dragenter', 'dragover'].forEach(t => dz.addEventListener(t, e => { e.preventDefault(); dz.classList.add('over'); }));
-  ['dragleave', 'drop'].forEach(t => dz.addEventListener(t, e => { e.preventDefault(); dz.classList.remove('over'); }));
-  dz.addEventListener('drop', e => setFile(e.dataTransfer.files[0]));
-
-  function li(parent, text) { const x = document.createElement('li'); x.textContent = text; parent.appendChild(x); return x; }
-
-  function render(r, name) {
-    const st = r.stats;
-    $('done').textContent = 'Programação gerada com sucesso.';
-    $('t-all').textContent = st.analyzed; $('t-rem').textContent = st.removed; $('t-kept').textContent = st.kept;
-    const locs = $('locs'); locs.textContent = '';
-    const max = Math.max(1, ...Object.values(st.perSheet));
-    Processor.SHEETS.forEach(n => {
-      const x = document.createElement('li'), a = document.createElement('span'), bar = document.createElement('span'), b = document.createElement('b'), c = document.createElement('span');
-      a.textContent = n; bar.className = 'bar'; b.style.width = (st.perSheet[n] / max * 100) + '%'; bar.appendChild(b);
-      c.className = 'n'; c.textContent = st.perSheet[n];
-      x.append(a, bar, c); locs.appendChild(x);
-    });
-    const notes = $('notes'); notes.textContent = '';
-    li(notes, r.integrity.ok ? 'Conferência: a soma das abas é igual às OS aproveitadas e nenhuma OS aparece em duas abas.' : 'ATENÇÃO: a conferência de totais falhou. Não use este arquivo.');
-    li(notes, 'Organização: serviços agrupados por colaborador e ordenados por horário dentro de cada grupo.');
-    const rs = Object.entries(r.removedSubjects);
-    if (rs.length) li(notes, 'Assuntos excluídos: ' + rs.map(([k, v]) => k + ' (' + v + ')').join(', ') + '.');
-    r.warnings.forEach(w => li(notes, w));
-    if (r.unused.length) li(notes, 'Colunas do relatório não utilizadas: ' + r.unused.join(', ') + '.');
-    $('result').hidden = false;
-  }
-
-  $('gerar').addEventListener('click', async () => {
-    showError(''); $('result').hidden = true; $('gerar').disabled = true; $('busy').hidden = false;
-    try {
-      await loadXlsx();
-      await new Promise(r => setTimeout(r, 30));
-      const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
-      let result = null, err = null;
-      for (const n of wb.SheetNames) {
-        const rows = XLSX.utils.sheet_to_json(wb.Sheets[n], { header: 1, raw: true, defval: '', blankrows: false });
-        try { result = Processor.processRows(rows); break; } catch (e) { err = e; }
-      }
-      if (!result) throw err || new Error('Planilha vazia.');
-      const buf = XLSX.write(Processor.buildWorkbook(result), { bookType: 'xlsx', type: 'array' });
-      if (url) URL.revokeObjectURL(url);
-      url = URL.createObjectURL(new Blob([buf], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
-      const d = new Date(), p = n => String(n).padStart(2, '0');
-      const a = $('download'); a.href = url; a.download = 'PROGRAMACAO_' + p(d.getDate()) + '-' + p(d.getMonth() + 1) + '-' + d.getFullYear() + '.xlsx';
-      render(result);
-    } catch (e) { showError('Erro: ' + e.message); }
-    finally { $('busy').hidden = true; $('gerar').disabled = false; }
-  });
 })();
-
+</script>
+<script src="app.js"></script>
+<script>
+(function(){
+  const d=new Date(), el=document.getElementById('today');
+  el.textContent='PROGRAMAÇÃO · '+String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+})();
 </script>
 </body>
 </html>
